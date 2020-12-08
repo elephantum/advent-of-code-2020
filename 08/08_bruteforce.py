@@ -3,8 +3,6 @@ import pandas as pd
 # %%
 df = pd.read_csv('input.txt', sep=' ', header=None, names=['op', 'arg'])
 # %%
-
-# %%
 def run(df):
     df['visit'] = 0
     ip = 0
@@ -26,20 +24,20 @@ def run(df):
         elif df.loc[ip, 'op'] == 'nop':
             ip += 1
 # %%
+%%time
 for ip in range(len(df)):
-    op =  df.loc[ip, 'op']
- 
-    if op in ['jmp', 'nop']:
-        if op == 'jmp':
-            df_test = df.copy()
-            df_test.loc[ip, 'op'] = 'nop'
-        elif op == 'nop':
-            df_test = df.copy()
-            df_test.loc[ip, 'op'] = 'jmp'
+    if df.loc[ip, 'op'] == 'jmp':
+        df_test = df.copy()
+        df_test.loc[ip, 'op'] = 'nop'
+    elif df.loc[ip, 'op'] == 'nop':
+        df_test = df.copy()
+        df_test.loc[ip, 'op'] = 'jmp'
+    else:
+        continue
 
-        (ok, acc) = run(df_test)
-        if ok:
-            break
+    (ok, acc) = run(df_test)
+    if ok:
+        break
 # %%
 # 7.67sec
 ip, ok, acc
